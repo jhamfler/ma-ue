@@ -24,7 +24,8 @@ else
 fi
 
 echo starting UE
-echo ma-ue --https_addr "$TARGETDOMAIN"":4430"
+echo ma-ue --target "https://""$TARGETDOMAIN"":4430/amfstart"
+echo ma-ue --target "https://""$TARGETIP"":4430/amfstart"
 cd /usr/local/bin/
 echo $(pwd)
-ma-ue --target "https://"$TARGETDOMAIN":4430/amfstart"
+ma-ue --target "https://""$TARGETIP"":4430/amfstart"

@@ -22,6 +22,7 @@ func main() {
 	//target := "https://127.0.0.1:4430/reqinfo"
 	//target := "https://http2.golang.org/reqinfo"
 	target := *target
+	fmt.Printf("target: " + target)
 
 	certs, err := tls.LoadX509KeyPair("server.crt", "server.key")
 	if err != nil {
