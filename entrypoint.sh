@@ -3,26 +3,28 @@ ips=()
 ip=
 
 echo started
-echo UE: $UEDOMAIN
-echo ip: $UEIP
+echo UE: $TARGETDOMAIN
+echo ip: $TARGETIP
 
-if [ -z "$UEDOMAIN" ]
+if [ -z "$TARGETDOMAIN" ]
 then
-        UEDOMAIN=ue.default.svc.cluster.local
+        TARGETDOMAIN=amf.default.svc.cluster.local
 fi
-echo UEDOMAIN: "$NFNAME"
+echo TARGETDOMAIN: "$TARGETDOMAIN"
 
-if [ -z "$UEIP" ]
+if [ -z "$TARGETIP" ]
 then
-        ips=($(dig +short $UEDOMAIN))
+        ips=($(dig +short $TARGETDOMAIN))
         ips=("${ips[@]%%:*}")
 
         ip=$ips
         echo found ip: $ips
 else
-        ip=$UEIP
+        ip=$TARGETIP
 fi
 
-echo starting Network Function: $UEDOMAIN
-echo NFservices --https_addr "$UEDOMAIN"":4430"
-ma-ue --target "https://amf.default.svc.cluster.local:4430/amfstart"
+echo starting UE
+echo ma-ue --https_addr "$TARGETDOMAIN"":4430"
+cd /usr/local/bin/
+echo $(pwd)
+ma-ue --target "https://"$TARGETDOMAIN":4430/amfstart"
