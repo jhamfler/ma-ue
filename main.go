@@ -14,6 +14,7 @@ var (
 	//target = flag.String("target", "https://127.0.0.1:4430/nnrf-disc/v1/nf-instances", "target url to call with GET")
 	//target = flag.String("target", "https://127.0.0.1:4430/nudm-sdm/v2/imsi-012345678901234/am-data", "target url to call with GET")
 	target = flag.String("target", "https://127.0.0.1:4430/amfstart", "target url to call with GET")
+	count =  flag.Int("count", 100, "10 x count = requests from UE to AMF from a single container")
 )
 
 func main() {
@@ -22,7 +23,9 @@ func main() {
 	//target := "https://127.0.0.1:4430/reqinfo"
 	//target := "https://http2.golang.org/reqinfo"
 	target := *target
-	fmt.Printf("target: " + target)
+	count := *count
+	fmt.Println("target: " + target)
+	fmt.Printf("count: %d\n", count)
 
 	certs, err := tls.LoadX509KeyPair("server.crt", "server.key")
 	if err != nil {
@@ -39,7 +42,7 @@ func main() {
 		Transport: t,
 	}
 
-	for i:=0;i<100;i=i+1 {
+	for i:=0;i<10*count;i=i+1 {
 		// create request
 		//r, _ := http.NewRequest("GET", target, bytes.NewBuffer([]byte("hello")))
 		//target = target + "?target-nf-type=AUSF&requester-nf-type=AMF"

@@ -28,4 +28,8 @@ echo ma-ue --target "https://""$TARGETDOMAIN"":4430/amfstart"
 echo ma-ue --target "https://$ip:4430/amfstart"
 cd /usr/local/bin/
 echo $(pwd)
-ma-ue --target "https://$ip:4430/amfstart"
+if [ -z $MSGMULTIPLIER ]
+then
+	MSGMULTIPLIER = 100
+fi
+ma-ue --target "https://$ip:4430/amfstart" --count $MSGMULTIPLIER # 1000 requests
