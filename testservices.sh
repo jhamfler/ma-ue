@@ -7,8 +7,10 @@
 
 # 8 from amf
 curl -v --http2 --insecure "https://127.0.0.1:4430/nausf-auth/v1/ue-authentications" -X POST -H "Content-Type: application/json" -d '{"servingNetworkName":"5G:mnc000.mcc000.3gppnetwork.org", "supiOrSuci":"suci-0-262-01-1111-0-0-0000000000"}'
+
 # 12 from ausf
-#curl -v --http2 --insecure "https://127.0.0.1:4430/nudm-ueau/v1/suci-0-262-01-1111-0-0-0000000000/security-information/generate-auth-data" -X POST -H "Content-Type: application/json" -d '{"servingNetworkName":"5G:mnc000.mcc000.3gppnetwork.org", "ausfInstanceId":"00000000-0000-0000-0000-000000000000"}'
+curl -v --http2 --insecure "https://127.0.0.1:4430/nudm-ueau/v1/suci-0-262-01-1111-0-0-0000000000/security-information/generate-auth-data" -X POST -H "Content-Type: application/json" -d '{"servingNetworkName":"5G:mnc000.mcc000.3gppnetwork.org", "ausfInstanceId":"00000000-0000-0000-0000-000000000000"}'
+
 # 21 from amf
 curl -v --http2 --insecure "https://127.0.0.1:4430/nausf-auth/v1/ue-authentications/authctxid0123456789/eap-session" -X POST -H "Content-Type: application/json" -d '{eapPayload: "MDAwMDExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTEx"}'
 
