@@ -53,18 +53,19 @@ func main() {
 		fmt.Printf("response: %v\n", resp)
 		if err != nil {
 			fmt.Printf("request error\n")
-		}
-		if resp != nil {
-			if resp.Body != nil {
-				resp.Body.Close()
+		} else {
+			if resp != nil {
+				if resp.Body != nil {
+					resp.Body.Close()
+				}
 			}
-		}
 
-		//defer resp.Body.Close()
-		content, _ := ioutil.ReadAll(resp.Body)
-		fmt.Printf("body length:%d\n", len(content))
-		resstring := string(content)
-		fmt.Println(resstring)
+			//defer resp.Body.Close()
+			content, _ := ioutil.ReadAll(resp.Body)
+			fmt.Printf("body length:%d\n", len(content))
+			resstring := string(content)
+			fmt.Println(resstring)
+		}
 	}
 }
 
