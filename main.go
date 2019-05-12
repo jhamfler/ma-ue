@@ -25,7 +25,7 @@ func main() {
 	target := *target
 	count := *count
 	fmt.Println("target: " + target)
-	fmt.Printf("count: %d\n", count)
+	fmt.Printf("msgmultiplier: %d\n", count)
 
 	certs, err := tls.LoadX509KeyPair("server.crt", "server.key")
 	if err != nil {
@@ -63,8 +63,8 @@ func main() {
 			//defer resp.Body.Close()
 			content, _ := ioutil.ReadAll(resp.Body)
 			fmt.Printf("body length:%d\n", len(content))
-			resstring := string(content)
-			fmt.Println(resstring)
+			//resstring := string(content)
+			//fmt.Println(resstring)
 		}
 	}
 }
