@@ -4,9 +4,10 @@ import "flag"
 import "golang.org/x/net/http2"
 import "net/http"
 //import "bytes"
-import "io/ioutil"
+//import "io/ioutil"
 import "fmt"
 import "crypto/tls"
+import "time"
 
 var (
 	prod = flag.Bool("prod", false, "Whether to configure itself to be the production server.")
@@ -49,10 +50,13 @@ func main() {
 		r, _ := http.NewRequest("GET", target, nil)
 
 		// call the server
+		var t1=currentTime()
+		var t2=currentTime()
 		resp, err := c.Do(r)
-		fmt.Printf("response: %v\n", resp)
+		var t3=currentTime()
+		var t=t3-t2-(t2-t1)
 		if err != nil {
-			fmt.Printf("request error\n")
+			fmt.Printf("time: %d; request error: %v\n", t, err)
 		} else {
 			if resp != nil {
 				if resp.Body != nil {
@@ -61,11 +65,15 @@ func main() {
 			}
 
 			//defer resp.Body.Close()
-			content, _ := ioutil.ReadAll(resp.Body)
-			fmt.Printf("body length:%d\n", len(content))
+			fmt.Printf("time: %d; response: %v\n", t, resp)
+			//content, _ := ioutil.ReadAll(resp.Body)
+			//fmt.Printf("body length:%d\n", len(content))
 			//resstring := string(content)
 			//fmt.Println(resstring)
 		}
 	}
 }
 
+func currentTime() int64 {
+	return time.Now().UnixNano() / 1e6
+}
