@@ -75,5 +75,5 @@ func main() {
 }
 
 func currentTime() int64 {
-	return time.Now().UnixNano() / 1e6
+	return time.Now().UnixNano()
 }
