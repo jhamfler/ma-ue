@@ -25,8 +25,10 @@ func main() {
 	//target := "https://http2.golang.org/reqinfo"
 	target := *target
 	count := *count
+	msgmultiplier := count * 10
 	fmt.Println("target: " + target)
 	fmt.Printf("msgmultiplier: %d\n", count)
+	var avgtime, successes, errors int64 = 0,0,0
 
 	certs, err := tls.LoadX509KeyPair("server.crt", "server.key")
 	if err != nil {
@@ -43,7 +45,7 @@ func main() {
 		Transport: t,
 	}
 
-	for i:=0;i<10*count;i=i+1 {
+	for i:=0;i<msgmultiplier;i=i+1 {
 		// create request
 		//r, _ := http.NewRequest("GET", target, bytes.NewBuffer([]byte("hello")))
 		//target = target + "?target-nf-type=AUSF&requester-nf-type=AMF"
@@ -57,6 +59,7 @@ func main() {
 		var t=t3-t2-(t2-t1)
 		if err != nil {
 			fmt.Printf("time: %d; request error: %v\n", t, err)
+			errors+=1
 		} else {
 			if resp != nil {
 				if resp.Body != nil {
@@ -65,13 +68,17 @@ func main() {
 			}
 
 			//defer resp.Body.Close()
-			fmt.Printf("time: %d; response: %v\n", t, resp)
+			fmt.Printf("starttime: %d; timetaken: %d; response: %v\n", t1, t, resp)
 			//content, _ := ioutil.ReadAll(resp.Body)
 			//fmt.Printf("body length:%d\n", len(content))
 			//resstring := string(content)
 			//fmt.Println(resstring)
+			successes+=1
+			avgtime += t
 		}
 	}
+
+	fmt.Printf("averagetimetaken: %d; successes: %d; errors: %d", avgtime/int64(msgmultiplier), successes, errors)
 }
 
 func currentTime() int64 {
