@@ -32,4 +32,5 @@ if [ -z $MSGMULTIPLIER ]
 then
 	MSGMULTIPLIER = 100
 fi
+
 ma-ue --target "https://$ip:4430/amfstart" --count $MSGMULTIPLIER # 1000 requests

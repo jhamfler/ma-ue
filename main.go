@@ -3,33 +3,44 @@ package main
 import "flag"
 import "golang.org/x/net/http2"
 import "net/http"
-//import "bytes"
-//import "io/ioutil"
 import "fmt"
 import "crypto/tls"
 import "time"
+import "log"
 
 var (
 	prod = flag.Bool("prod", false, "Whether to configure itself to be the production server.")
 	//target = flag.String("target", "https://127.0.0.1:4430/reqinfo", "target url to call with GET")
-	//target = flag.String("target", "https://127.0.0.1:4430/nnrf-disc/v1/nf-instances", "target url to call with GET")
-	//target = flag.String("target", "https://127.0.0.1:4430/nudm-sdm/v2/imsi-012345678901234/am-data", "target url to call with GET")
 	target = flag.String("target", "https://127.0.0.1:4430/amfstart", "target url to call with GET")
 	count =  flag.Int("count", 100, "10 x count = requests from UE to AMF from a single container")
 )
 
 func main() {
 	flag.Parse()
-	//target := "http://127.0.0.1:8080"
-	//target := "https://127.0.0.1:4430/reqinfo"
-	//target := "https://http2.golang.org/reqinfo"
+	// start server to listen for start signal
+	var start = 0
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if start == 0 {
+			start = 1
+			startue()
+		}
+	})
+	log.Fatal(http.ListenAndServe("0.0.0.0:55555", nil))
+}
+
+func currentTime() int64 {
+	return time.Now().UnixNano()
+}
+
+func startue(){
 	target := *target
 	count := *count
 	msgmultiplier := count * 10
 	fmt.Println("target: " + target)
 	fmt.Printf("msgmultiplier: %d\n", count)
-	var avgtime, successes, errors int64 = 0,0,0
+	var sumtime, successes, errors int64 = 0,0,0
 
+	// requests
 	certs, err := tls.LoadX509KeyPair("server.crt", "server.key")
 	if err != nil {
 		fmt.Printf("error %v\n", err)
@@ -57,8 +68,9 @@ func main() {
 		resp, err := c.Do(r)
 		var t3=currentTime()
 		var t=t3-t2-(t2-t1)
+
 		if err != nil {
-			fmt.Printf("time: %d; request error: %v\n", t, err)
+			fmt.Printf("starttime: %d; timetaken: %d request error: %v\n", t2, t, err)
 			errors+=1
 		} else {
 			if resp != nil {
@@ -68,19 +80,14 @@ func main() {
 			}
 
 			//defer resp.Body.Close()
-			fmt.Printf("starttime: %d; timetaken: %d; response: %v\n", t1, t, resp)
+			fmt.Printf("starttime: %d; timetaken: %d; response: %v\n", t2, t, resp)
 			//content, _ := ioutil.ReadAll(resp.Body)
 			//fmt.Printf("body length:%d\n", len(content))
 			//resstring := string(content)
 			//fmt.Println(resstring)
 			successes+=1
-			avgtime += t
+			sumtime += t
 		}
 	}
-
-	fmt.Printf("averagetimetaken: %d; successes: %d; errors: %d", avgtime/int64(msgmultiplier), successes, errors)
-}
-
-func currentTime() int64 {
-	return time.Now().UnixNano()
+	fmt.Printf("averagetimetaken: %d; successes: %d; errors: %d\n", sumtime/int64(msgmultiplier), successes, errors)
 }
