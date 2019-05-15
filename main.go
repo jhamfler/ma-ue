@@ -34,6 +34,7 @@ func currentTime() int64 {
 }
 
 func startue(){
+	fmt.Printf("startue\n")
 	target := *target
 	count := *count
 	msgmultiplier := count * 10
