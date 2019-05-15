@@ -1,6 +1,5 @@
 package main
 
-import "os"
 import "flag"
 import "golang.org/x/net/http2"
 import "net/http"
@@ -92,5 +91,4 @@ func startue(){
 		}
 	}
 	fmt.Printf("averagetimetaken: %d; successes: %d; errors: %d\n", sumtime/int64(msgmultiplier), successes, errors)
-	os.Exit(0)
 }
