@@ -89,5 +89,6 @@ func startue(){
 			sumtime += t
 		}
 	}
+	c.CloseIdleConnections()
 	fmt.Printf("averagetimetaken: %d; successes: %d; errors: %d\n", sumtime/int64(msgmultiplier), successes, errors)
 }
